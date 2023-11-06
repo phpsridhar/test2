@@ -1,24 +1,14 @@
-def solution(A):
-    # Remove non-positive integers and duplicates
-    A = list(set(filter(lambda x: x > 0, A)))
+def solution1(A, B, S):
+    slot_to_patient = {}
 
-    def find_missing_recursive(arr, start, end):
-        if not arr or arr[0] != start:
-            return start
-
-        if len(arr) == 1:
-            return start + 1
-
-        mid = (start + end) // 2
-        left_chunk = [x for x in arr if x <= mid]
-        right_chunk = [x for x in arr if x > mid]
-
-        if len(left_chunk) == mid - start + 1:
-            return find_missing_recursive(right_chunk, mid + 1, end)
+    for i in range(len(A)):
+        if A[i] in slot_to_patient and B[i] in slot_to_patient:
+            return False
+        if A[i] in slot_to_patient:
+            slot_to_patient[B[i]] = i
+        elif B[i] in slot_to_patient:
+            slot_to_patient[A[i]] = i
         else:
-            return find_missing_recursive(left_chunk, start, mid)
+            slot_to_patient[A[i]] = i
 
-    if not A:
-        return 1
-
-    return find_missing_recursive(A, 1, len(A))
+    return len(slot_to_patient) <= S
