@@ -1,14 +1,11 @@
-def solution1(A, B, S):
-    slot_to_patient = {}
+def solution(letters):
+    different_letters = set()  # To store different letters that meet the conditions
+    seen_letters = set()  # To keep track of seen letters
 
-    for i in range(len(A)):
-        if A[i] in slot_to_patient and B[i] in slot_to_patient:
-            return False
-        if A[i] in slot_to_patient:
-            slot_to_patient[B[i]] = i
-        elif B[i] in slot_to_patient:
-            slot_to_patient[A[i]] = i
-        else:
-            slot_to_patient[A[i]] = i
+    for char in letters:
+        if char.isalpha():
+            if char.lower() in seen_letters and char.isupper():
+                different_letters.add(char.lower())
+            seen_letters.add(char.lower())
 
-    return len(slot_to_patient) <= S
+    return len(different_letters)
