@@ -1,23 +1,24 @@
- def partition(arr):
-        pivot = 1
-        left, right = [], []
-        for num in arr:
-            if num < pivot:
-                left.append(num)
-            else:
-                right.append(num)
-        return left, right
+def solution(A):
+    # Remove non-positive integers and duplicates
+    A = list(set(filter(lambda x: x > 0, A)))
 
-    # Main function for finding the smallest missing positive integer
-    def find_smallest_missing_positive(arr):
-        if not arr:
-            return 1
+    def find_missing_recursive(arr, start, end):
+        if not arr or arr[0] != start:
+            return start
 
-        left, right = partition(arr)
+        if len(arr) == 1:
+            return start + 1
 
-        if sum(left) < len(left) * 1:
-            return find_smallest_missing_positive(left)
+        mid = (start + end) // 2
+        left_chunk = [x for x in arr if x <= mid]
+        right_chunk = [x for x in arr if x > mid]
+
+        if len(left_chunk) == mid - start + 1:
+            return find_missing_recursive(right_chunk, mid + 1, end)
         else:
-            return find_smallest_missing_positive(right)
+            return find_missing_recursive(left_chunk, start, mid)
 
-    return find_smallest_missing_positive(A)
+    if not A:
+        return 1
+
+    return find_missing_recursive(A, 1, len(A))
